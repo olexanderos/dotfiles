@@ -34,8 +34,8 @@ tasks:
         vars: { LINK: "{{.XDG_CONFIG_HOME}}/task", TARGET: config/task }
       - task: link:dir
         vars: { LINK: "{{.XDG_CONFIG_HOME}}/tmux", TARGET: config/tmux }
-      - task: link:dir
-        vars: { LINK: "{{.XDG_CONFIG_HOME}}/tmux/plugins/tpm", TARGET: submods/plugins/tpm }
+      # - task: link:dir
+      #   vars: { LINK: "{{.XDG_CONFIG_HOME}}/tmux/plugins/tpm", TARGET: submods/plugins/tpm }
       - task: link:dir
         vars: { LINK: "{{.XDG_CONFIG_HOME}}/uv", TARGET: config/uv }
       - task: link:dir
