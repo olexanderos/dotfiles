@@ -103,7 +103,7 @@ npx() { lazy_load_nvm; npx "$@"; }
 export PATH="$PATH:/Users/$(whoami)/.local/bin"
 
 # --- Functions ---
-source ~/.zsh_functions
+# source ~/.zsh_functions
 
 # --- Completions ---
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
