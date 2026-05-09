@@ -89,7 +89,16 @@ function yy() {
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
 # --- nvm (lazy) ---
-export NVM_DIR="$HOME/.nvm"
+# Node
+# source: https://blog.mitsunee.com/post/n-xdg-setup
+export NVM_DIR="$XDG_DATA_HOME/nvm"
+export N_PREFIX="$XDG_DATA_HOME/node"
+export N_CACHE_PREFIX="$XDG_CACHE_HOME"
+export N_PRESERVE_NPM=1
+export N_PRESERVE_COREPACK=1
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
+export COREPACK_HOME="$XDG_CACHE_HOME/node/corepack"
+export NODE_REPL_HISTORY="$XDG_STATE_HOME/node_repl/history"
 lazy_load_nvm() {
   unset -f nvm node npm npx
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
