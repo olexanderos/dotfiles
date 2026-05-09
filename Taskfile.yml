@@ -15,11 +15,13 @@ tasks:
       - task: link:dir
         vars: { LINK: "{{.XDG_CONFIG_HOME}}/duckcli", TARGET: config/duckcli }
       - task: link:dir
-        vars: { LINK: "{{.XDG_CONFIG_HOME}}/git", TARGET: config/git }
-      - task: link:dir
         vars: { LINK: "{{.XDG_CONFIG_HOME}}/gh", TARGET: config/gh }
       - task: link:dir
         vars: { LINK: "{{.XDG_CONFIG_HOME}}/ghostty", TARGET: config/ghostty }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/git", TARGET: config/git }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/htop", TARGET: config/htop }
       - task: link:dir
         vars: { LINK: "{{.XDG_CONFIG_HOME}}/lazygit", TARGET: config/lazygit }
       - task: link:dir

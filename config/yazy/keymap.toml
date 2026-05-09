@@ -1,0 +1,5 @@
+[[mgr.prepend_keymap]]
+on   = [ "g", "w" ]
+run  = "cd ~/github/data-platform-core"
+desc = "cd to data-platform-core"
+

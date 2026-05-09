@@ -1,0 +1,4 @@
+keybind = ctrl+b>ctrl+l=new_split:right
+keybind = ctrl+b>ctrl+h=new_split:left
+keybind = ctrl+b>ctrl+j=new_split:down
+keybind = ctrl+b>ctrl+l=new_split:up

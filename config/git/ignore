@@ -1,0 +1,9 @@
+.cursorignore
+.cursor
+.vscode/extensions/icons/*
+.tmp*
+pipelines
+**/.githooks
+
+
+**/.claude/settings.local.json
