@@ -1,0 +1,166 @@
+# Terminal emulator that uses platform-native UI and GPU acceleration
+cask "ghostty"
+
+########################################################
+# Git and related tools
+########################################################
+# GitHub command-line tool
+brew "gh"
+# Distributed revision control system
+brew "git"
+# Syntax-highlighting pager for git and diff output
+brew "git-delta"
+# Git extension for versioning large files
+brew "git-lfs"
+# Run your GitHub Actions locally
+brew "act"
+
+# AWS Cloud Development Kit - framework for defining AWS infra as code
+brew "aws-cdk"
+# Official Amazon AWS command-line interface
+brew "awscli"
+# Bourne-Again SHell, a UNIX command interpreter
+brew "bash"
+# Clone of cat(1) with syntax highlighting and Git integration
+brew "bat"
+# Secure and free password manager for all of your devices
+brew "bitwarden-cli"
+# Yet another cross-platform graphical process/system monitor
+brew "bottom"
+# Secure runtime for JavaScript and TypeScript
+brew "deno"
+# Load/unload environment variables based on $PWD
+brew "direnv"
+
+########################################################
+# Tools for managing containers
+########################################################
+# Pack, ship and run any application as a lightweight container
+brew "docker"
+# Docker CLI plugin for extended build capabilities with BuildKit
+brew "docker-buildx"
+# Isolated development environments using Docker
+brew "docker-compose"
+# Container runtimes on MacOS (and Linux) with minimal setup
+brew "colima"
+########################################################
+
+# Embeddable SQL OLAP Database Management System
+brew "duckdb"
+# Modern, maintained replacement for ls
+brew "eza"
+# Simple, fast and user-friendly alternative to find
+brew "fd"
+# Create thumbnails for your video files
+brew "ffmpegthumbnailer"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+
+
+
+# GNU implementation of the famous stream editor
+brew "gnu-sed"
+# Improved top (interactive process viewer)
+brew "htop"
+# Tools and libraries to manipulate images in select formats
+brew "imagemagick"
+# Lazier way to manage everything docker
+brew "lazydocker"
+# Simple terminal UI for git commands
+brew "lazygit"
+# Clone of ls with colorful output, file type icons, and more
+brew "lsd"
+# Ambitious Vim-fork focused on extensibility and agility
+brew "neovim"
+# Library for color text mode, widget based user interfaces
+brew "newt"
+# Port scanning utility for large networks
+brew "nmap"
+# Create, run, and share large language models (LLMs)
+brew "ollama", args: ["HEAD"]
+# PDF rendering library (based on the xpdf-3.0 code base)
+brew "poppler"
+# Monitor data's progress through a pipe
+brew "pv"
+# Perl-powered file rename script with many helpful built-ins
+brew "rename"
+# SVG rendering tool and library
+brew "resvg"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# 7-Zip is a file archiver with a high compression ratio
+brew "sevenzip"
+# Cross-shell prompt for astronauts
+brew "starship"
+# Log file highlighter
+brew "tailspin"
+# Simplified and community-driven man pages
+brew "tldr"
+# Terminal multiplexer
+brew "tmux"
+# Display directories as trees (with optional color/HTML output)
+brew "tree"
+# Executes a program periodically, showing output fullscreen
+brew "watch"
+# Watch files and take action when they change
+brew "watchman"
+# Blazing fast terminal file manager written in Rust, based on async I/O
+brew "yazi"
+# Process YAML, JSON, XML, CSV and properties documents from the CLI
+brew "yq"
+# Shell extension to navigate your filesystem faster
+brew "zoxide"
+# Fish shell like syntax highlighting for zsh
+# brew "zsh-syntax-highlighting"
+
+# Third-party taps
+# A simple terminal UI for managing SSH connections.
+tap "adembc/tap"
+brew "adembc/tap/lazyssh"
+
+# A fast, cross-platform build tool inspired by Make, designed for modern workflows.
+tap "go-task/tap"
+brew "go-task/tap/go-task"
+
+# e1s is a terminal application to simply browsing and manage AWS ECS resources, with a focus on Fargate. Inspired by k9s.
+tap "keidarcy/tap"
+brew "keidarcy/tap/e1s"
+# Docker Compose Viewer - A TUI tool for monitoring Docker Compose applications
+tap "tokuhirom/tap"
+brew "tokuhirom/tap/dcv"
+
+# Casks
+# Enable Windows-like alt-tab
+cask "alt-tab"
+# Memory training application
+cask "anki"
+# Web browser focusing on privacy
+cask "brave-browser"
+
+# Fonts
+cask "font-fira-code"
+cask "font-hack-nerd-font"
+
+tap "colindean/fonts-nonfree"
+cask "colindean/fonts-nonfree/font-microsoft-office"
+cask "font-symbols-only-nerd-font"
+
+# GIT client
+cask "fork"
+
+# Keyboard customiser
+cask "karabiner-elements"
+# Clipboard manager
+cask "maccy"
+# Collaboration platform for API development
+cask "postman"
+# Move and resize windows using keyboard shortcuts or snap areas
+cask "rectangle"
+# Plugin for AWS CLI to start and end sessions that connect to managed instances
+cask "session-manager-plugin"
+# Team communication and collaboration software
+cask "slack"
+# Messaging app with a focus on speed and security
+cask "telegram"
+# Open-source code editor
+cask "visual-studio-code"

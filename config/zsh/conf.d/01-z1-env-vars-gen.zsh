@@ -1,0 +1,81 @@
+# ------------------------------------------------------------------------------
+# region: Environment and envvars
+# ------------------------------------------------------------------------------
+
+# Set common variables if they have not already been set.
+export EDITOR=${EDITOR:-nvim}
+export VISUAL=${VISUAL:-nvim}
+export PAGER=${PAGER:-less}
+# export BROWSER=${BROWSER:-firefox}
+
+# Encodings, languges and misc settings
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
+
+# Reduce key delay
+export KEYTIMEOUT=1
+
+# Make Apple Terminal behave.
+if [[ "$OSTYPE" == darwin* ]]; then
+  export SHELL_SESSIONS_DISABLE=1
+fi
+
+# Homebrew
+if [[ "$OSTYPE" == darwin* ]] && (( $+commands[brew] )); then
+  if [[ "${commands[brew]}" == "/opt/homebrew/bin/brew" ]]; then
+    HOMEBREW_PREFIX=/opt/homebrew
+  else
+    HOMEBREW_PREFIX=/usr/local
+  fi
+  # brew behavior: no telemetry, greedy upgrades, quiet output.
+  # Autoremove is now the default — setting HOMEBREW_AUTOREMOVE=1 is a
+  # no-op and emits a deprecation warning. Actively `unset` it here so
+  # any stale export inherited from a parent process (Terminal.app /
+  # tmux / wezterm started before this config was updated) gets scrubbed
+  # as soon as a new zsh sources the config.
+  unset HOMEBREW_AUTOREMOVE
+  export HOMEBREW_NO_ANALYTICS=1
+  export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+  export HOMEBREW_UPGRADE_GREEDY=1
+  export HOMEBREW_NO_ENV_HINTS=1
+  export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar";
+  export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX";
+  export MANPATH="$HOMEBREW_PREFIX/share/man${MANPATH+:$MANPATH}:";
+  export INFOPATH="$HOMEBREW_PREFIX/share/info:${INFOPATH:-}";
+  export HELPDIR="$HOMEBREW_PREFIX/share/zsh/help"
+fi
+
+# Ghostty terminal — override TERM until ghostty terminfo is installed system-wide.
+# Remove this block once `infocmp xterm-ghostty` succeeds.
+if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+  export TERM=xterm-256color
+fi
+
+# Set $PATH.
+
+# Ensure path arrays do not contain duplicates.
+typeset -gU path
+
+path=(
+  # Rust CLI Utils
+  $CARGO_HOME/bin(N)
+
+  # core
+  $HOME/{,s}bin(N)
+  $HOME/.local/{,s}bin(N)
+  /opt/{homebrew,local}/{,s}bin(N)
+  $HOMEBREW_PREFIX/{,s}bin(N)
+
+  # apps
+  $HOMEBREW_PREFIX/opt/curl/bin(N)
+  $HOMEBREW_PREFIX/opt/go/libexec/bin(N)
+  $HOMEBREW_PREFIX/opt/ruby/bin(N)
+  $HOMEBREW_PREFIX/share/npm/bin(N)
+  
+  $path
+)
+
+# endregion --------------------------------------------------------------------
+
+# vim: ft=zsh

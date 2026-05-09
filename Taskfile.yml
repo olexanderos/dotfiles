@@ -1,0 +1,103 @@
+version: "3"
+
+vars:
+  DOTFILES_DIR: "{{.ROOT_DIR}}"
+  XDG_CONFIG_HOME: '{{.XDG_CONFIG_HOME | default (printf "%s/.config" .HOME)}}'
+
+tasks:
+  link:
+    desc: Create all symlinks for dotfiles
+    cmds:
+      - task: link:file
+        vars: { LINK: "{{.HOME}}/.zshenv", TARGET: config/zsh/.zshenv }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/delta", TARGET: config/delta }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/duckcli", TARGET: config/duckcli }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/git", TARGET: config/git }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/gh", TARGET: config/gh }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/ghostty", TARGET: config/ghostty }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/lazygit", TARGET: config/lazygit }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/marimo", TARGET: config/marimo }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/nvim", TARGET: config/nvim }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/starship", TARGET: config/starship }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/task", TARGET: config/task }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/tmux", TARGET: config/tmux }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/tmux/plugins/tpm", TARGET: submods/plugins/tpm }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/uv", TARGET: config/uv }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/yazi", TARGET: config/yazi }
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/zsh", TARGET: config/zsh }
+      # ssh
+      - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/ssh", TARGET: config/ssh }
+      - task: link:file
+        vars: { LINK: "{{.HOME}}/.ssh/config", TARGET: "{{.XDG_CONFIG_HOME}}/ssh/config" }
+      # Application Support configs
+      - task: link:file
+        vars: { LINK: "{{.HOME}}/Library/Application Support/Code/User/keybindings.json", TARGET: config/vscode/keybindings.json }
+      - task: link:file
+        vars: { LINK: "{{.HOME}}/Library/Application Support/Code/User/settings.json", TARGET: config/vscode/settings.json }
+
+  link:dir:
+    internal: true
+    desc: Symlink a directory
+    requires:
+      vars: [LINK, TARGET]
+    status:
+      - test -L "{{.LINK}}"
+    cmds:
+      - mkdir -p "$(dirname "{{.LINK}}")"
+      - ln -sfn "{{.DOTFILES_DIR}}/{{.TARGET}}" "{{.LINK}}"
+
+  link:file:
+    internal: true
+    desc: Symlink a single file
+    requires:
+      vars: [LINK, TARGET]
+    vars:
+      RESOLVED_TARGET: '{{if hasPrefix "/" .TARGET}}{{.TARGET}}{{else}}{{.DOTFILES_DIR}}/{{.TARGET}}{{end}}'
+    status:
+      - test -L "{{.LINK}}"
+    cmds:
+      - mkdir -p "$(dirname "{{.LINK}}")"
+      - ln -sf "{{.RESOLVED_TARGET}}" "{{.LINK}}"
+
+  clean:
+    desc: Remove all symlinks in ~ and ~/.config that point into this dotfiles directory
+    cmds:
+      - task: clean:dir
+        vars:
+          TARGET_DIR: "{{.HOME}}"
+      - task: clean:dir
+        vars:
+          TARGET_DIR: "{{.HOME}}/.config"
+
+  clean:dir:
+    internal: true
+    desc: Remove symlinks in TARGET_DIR that point into the dotfiles directory
+    requires:
+      vars: [TARGET_DIR]
+    vars:
+      TARGET_DIR: "{{.TARGET_DIR}}"
+    cmds:
+      - |
+        [ -d "{{.TARGET_DIR}}" ] || exit 0
+        find "{{.TARGET_DIR}}" -maxdepth 1 -type l | while read -r link; do
+          target="$(readlink "$link")"
+          case "$target" in
+            {{.DOTFILES_DIR}}/*) echo "removing $link -> $target"; rm "$link" ;;
+          esac
+        done

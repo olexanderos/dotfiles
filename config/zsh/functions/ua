@@ -1,0 +1,44 @@
+##? ua - activate the nearest uv python virtual environment
+##?
+##? usage:
+##?   ua
+##?
+##? behavior:
+##?   traverses up the directory tree from the current directory searching for
+##?   a valid uv python virtual environment (uv.lock + .venv/bin/activate).
+##?   if found, activates the virtual environment.
+##?
+##? examples:
+##?   ua                                     # activate nearest uv environment
+##?   cd ~/projects/myproject/src && ua      # finds ~/projects/myproject/.venv
+
+ua() {
+  [[ "$1" == "-h" || "$1" == "--help" ]] && { grep "^##?" "${(%):-%x}" | cut -c 5-; return 0; }
+
+  local current_dir=$PWD
+  local env_dir=""
+
+  while [[ $current_dir != "/" ]]; do
+    if [[ -f "$current_dir/uv.lock" ]] && [[ -d "$current_dir/.venv" ]]; then
+      if [[ -f "$current_dir/.venv/bin/activate" ]]; then
+        print "Found uv environment in: $current_dir"
+        env_dir=$current_dir
+        break
+      else
+        print "Warning: Found incomplete uv environment in $current_dir (.venv/bin/activate missing)"
+      fi
+    fi
+
+    current_dir="${current_dir:h}"
+  done
+
+  if [[ -n "$env_dir" ]]; then
+    source "$env_dir/.venv/bin/activate"
+    return 0
+  else
+    print "Error: No valid uv environment found in parent directories"
+    return 1
+  fi
+}
+
+# vim: ft=zsh

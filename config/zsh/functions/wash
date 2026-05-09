@@ -1,0 +1,69 @@
+##? wash - clean up DS_Store, swap files, and backup files
+##?
+##? usage:
+##?   wash [options] [directory...]
+##?
+##? options:
+##?   -p, --preview  show files to be deleted without removing them
+##?   -c, --current  only clean the specified directory level (no recursion)
+##?
+##? examples:
+##?   wash -p                        # preview cleanup in current directory
+##?   wash ~/Downloads               # run cleanup recursively in Downloads
+
+wash() {
+  [[ "$1" == "-h" || "$1" == "--help" ]] && { grep "^##?" "${(%):-%x}" | cut -c 5-; return 0; }
+
+  local bold=$'\e[1m'
+  local blue=$'\e[34m'
+  local green=$'\e[32m'
+  local yellow=$'\e[33m'
+  local reset=$'\e[0m'
+
+  local target_dirs=()
+  local use_depth=false
+  local preview_mode=false
+
+  while (($# > 0)); do
+    case "$1" in
+      -p|--preview) preview_mode=true ;;
+      -c|--current) use_depth=true ;;
+      -*) echo "${yellow}Unknown option: $1${reset}"; return 1 ;;
+      *) [[ -d "$1" ]] && target_dirs+=("$1") ;;
+    esac
+    shift
+  done
+
+  # Default to current dir
+  [[ ${#target_dirs[@]} -eq 0 ]] && target_dirs=(".")
+
+  local dir
+  for dir in "${target_dirs[@]}"; do
+    (
+      local abs_path
+      abs_path=$(builtin cd "$dir" && pwd)
+      builtin cd "$abs_path" || exit 1
+
+      local fd_args=('-tf' '-u')
+      [[ "$use_depth" == true ]] && fd_args+=('-d' '1')
+      local pattern='\.(DS_Store|swo|swp)$|~$'
+
+      local results=("${(@f)$(fd $pattern "${fd_args[@]}")}")
+
+      if [[ -z "${results[1]}" ]]; then
+        echo "${blue}✨ $abs_path is already clean.${reset}"
+      else
+        if [[ "$preview_mode" == true ]]; then
+          echo "${bold}${blue}--- Preview: Files in $abs_path ---${reset}"
+          printf '%s\n' "${results[@]}"
+          echo "${yellow}Total: ${#results} file(s)${reset}"
+        else
+          fd $pattern "${fd_args[@]}" -X rm
+          echo "${green}✅ Cleaned ${#results} file(s) from: $abs_path${reset}"
+        fi
+      fi
+    )
+  done
+}
+
+# vim: ft=zsh

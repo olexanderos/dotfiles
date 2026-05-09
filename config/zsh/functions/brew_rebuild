@@ -1,0 +1,21 @@
+##? brew_rebuild - rebuild cache for various brew packages
+##?
+##? usage:
+##?   brew_rebuild
+##?
+##? examples:
+##?   brew_rebuild    # rebuild bat and tldr caches
+
+brew_rebuild() {
+  [[ "$1" == "-h" || "$1" == "--help" ]] && { grep "^##?" "${(%):-%x}" | cut -c 5-; return 0; }
+
+  printf ">>> updating bat cache...\n"
+  bat cache --build
+  printf ">>> bat cache updated...\n"
+  printf "\n"
+  printf ">>> updating tldr cache...\n"
+  tldr --update
+  printf ">>> tldr cache updated...\n"
+}
+
+# vim: ft=zsh
