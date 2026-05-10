@@ -24,25 +24,24 @@ else
   echo "[info] detected BASH version: ${BASH_VERSION}"
 fi
 
-# install ghostty terminal
-brew install --cask ghostty
-# Cross-shell prompt instead of oh-my-zsh + powerlevel10k
-which starship || brew install starship
-
 # install ZSH
 which zsh || (brew install zsh)
 # ZSH Plugins: https://github.com/zdharma-continuum/zinit
 bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 
+# A fast, cross-platform build tool inspired by Make, designed for modern workflows.
+brew install "go-task/tap/go-task"
+
+# install ghostty terminal
+brew install --cask ghostty
+# Cross-shell prompt instead of oh-my-zsh + powerlevel10k
+which starship || brew install starship
 
 # install latest GIT
 brew install git # GitHub command-line tool
 brew install git-lfs
 brew install gh
 brew install git-delta # Syntax-highlighting pager for git and diff output
-
-# A fast, cross-platform build tool inspired by Make, designed for modern workflows.
-brew install "go-task/tap/go-task"
 
 ########################################################
 # Phase 2: Clone dotfiles
