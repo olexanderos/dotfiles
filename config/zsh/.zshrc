@@ -22,6 +22,14 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 
+# --- Keybindings (oh-my-zsh defaults + macOS Alt+arrows) ---
+zinit snippet OMZL::key-bindings.zsh
+bindkey '^[[1;3D' backward-word     # Alt+Left
+bindkey '^[[1;3C' forward-word      # Alt+Right
+
+# Stop at /, -, . so Alt+arrows navigate path segments, not whole strings
+WORDCHARS='*?_[]~=&;!#$%^(){}'
+
 # --- Editor ---
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
