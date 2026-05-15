@@ -121,3 +121,10 @@ tasks:
             {{.DOTFILES_DIR}}/*) echo "removing $link -> $target"; rm "$link" ;;
           esac
         done
+
+  bootstrap:
+    desc: Bootstrap the system
+    cmds:
+      - task: clean
+      - task: create
+      - task: link
