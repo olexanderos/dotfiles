@@ -1,3 +1,6 @@
+# In zsh interactive mode, '#' is a regular character by default (unlike bash), so 'git something # git checkout main' gets passed as extra arguments
+setopt INTERACTIVE_COMMENTS
+
 # --- zinit bootstrap ---
 ZINIT_HOME="${HOME}/.local/share/zinit/zinit.git"
 [ ! -d "$ZINIT_HOME" ] && mkdir -p "$(dirname $ZINIT_HOME)" && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
@@ -9,6 +12,7 @@ autoload -Uz _zinit
 zinit snippet OMZP::aws
 zinit snippet OMZP::common-aliases
 zinit snippet OMZP::dotenv
+zinit snippet OMZP::git
 # zinit snippet OMZP::macos
 zinit snippet OMZP::npm
 zinit snippet OMZP::direnv
@@ -46,25 +50,25 @@ alias ls=lsd
 alias pull="git pull -v"
 alias stash="git stash push"
 alias pop="git stash pop"
-alias ga='git add'
-alias gap='ga --patch'
-alias gb='git branch'
-alias gba='gb --all'
-alias gc='git commit'
-alias gca='gc --amend --no-edit'
-alias gce='gc --amend'
-alias gco='git checkout'
-alias gcl='git clone --recursive'
-alias gd='git diff --output-indicator-new=" " --output-indicator-old=" "'
-alias gds='gd --staged'
-alias gi='git init'
-alias gl='git log --graph --all --pretty=format:"%C(magenta)%h %C(white) %an  %ar%C(blue)  %D%n%s%n"'
-alias gm='git merge'
-alias gn='git checkout -b'
-alias gp='git push'
-alias gr='git reset'
-alias gs='git status --short'
-alias gu='git pull'
+# alias ga='git add'
+# alias gap='ga --patch'
+# alias gb='git branch'
+# alias gba='gb --all'
+# alias gc='git commit'
+# alias gca='gc --amend --no-edit'
+# alias gce='gc --amend'
+# alias gco='git checkout'
+# alias gcl='git clone --recursive'
+# alias gd='git diff --output-indicator-new=" " --output-indicator-old=" "'
+# alias gds='gd --staged'
+# alias gi='git init'
+# alias gl='git log --graph --all --pretty=format:"%C(magenta)%h %C(white) %an  %ar%C(blue)  %D%n%s%n"'
+# alias gm='git merge'
+# alias gn='git checkout -b'
+# alias gp='git push'
+# alias gr='git reset'
+# alias gs='git status --short'
+# alias gu='git pull'
 
 alias lg='lazygit --use-config-dir ~/.config/lazygit'
 alias ldk=lazydocker
