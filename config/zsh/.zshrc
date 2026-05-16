@@ -1,3 +1,6 @@
+# ENV variables
+export STARSHIP_CONFIG=$XDG_CONFIG_HOME/starship/starship.toml
+
 # In zsh interactive mode, '#' is a regular character by default (unlike bash), so 'git something # git checkout main' gets passed as extra arguments
 setopt INTERACTIVE_COMMENTS
 
@@ -121,8 +124,25 @@ node() { lazy_load_nvm; node "$@"; }
 npm() { lazy_load_nvm; npm "$@"; }
 npx() { lazy_load_nvm; npx "$@"; }
 
-export PATH="$PATH:/Users/$(whoami)/.local/bin"
 
+path=(
+  # Rust CLI Utils
+  $CARGO_HOME/bin(N)
+
+  # core
+  $HOME/{,s}bin(N)
+  $HOME/.local/{,s}bin(N)
+  /opt/{homebrew,local}/{,s}bin(N)
+  $HOMEBREW_PREFIX/{,s}bin(N)
+
+  # apps
+  $HOMEBREW_PREFIX/opt/curl/bin(N)
+  $HOMEBREW_PREFIX/opt/go/libexec/bin(N)
+  $HOMEBREW_PREFIX/opt/ruby/bin(N)
+  $HOMEBREW_PREFIX/share/npm/bin(N)
+
+  $path
+)
 # --- Functions ---
 # source ~/.zsh_functions
 
