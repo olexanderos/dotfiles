@@ -67,7 +67,11 @@ tasks:
         vars: { LINK: "{{.HOME}}/.ssh/config", TARGET: "{{.XDG_CONFIG_HOME}}/ssh/config" }
       # Application Support configs
       - task: link:file
+        vars: { LINK: "{{.HOME}}/Library/Application Support/Code/User/chatLanguageModels.json", TARGET: config/vscode/chatLanguageModels.json}
+      - task: link:file
         vars: { LINK: "{{.HOME}}/Library/Application Support/Code/User/keybindings.json", TARGET: config/vscode/keybindings.json }
+      - task: link:file
+        vars: { LINK: "{{.HOME}}/Library/Application Support/Code/User/mcp.json", TARGET: config/vscode/mcp.json }
       - task: link:file
         vars: { LINK: "{{.HOME}}/Library/Application Support/Code/User/settings.json", TARGET: config/vscode/settings.json }
 
