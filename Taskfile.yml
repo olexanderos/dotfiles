@@ -35,6 +35,8 @@ tasks:
       - task: link:file
         vars: { LINK: "{{.HOME}}/.zshenv", TARGET: config/zsh/.zshenv }
       - task: link:dir
+        vars: { LINK: "{{.XDG_CONFIG_HOME}}/atuin", TARGET: config/atuin }
+      - task: link:dir
         vars: { LINK: "{{.XDG_CONFIG_HOME}}/delta", TARGET: config/delta }
       - task: link:dir
         vars: { LINK: "{{.XDG_CONFIG_HOME}}/duckcli", TARGET: config/duckcli }
