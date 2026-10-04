@@ -1,155 +1,87 @@
-# ENV variables
-export STARSHIP_CONFIG=$XDG_CONFIG_HOME/starship/starship.toml
+# clear the "Last login" message for new tabs in terminal --------
+# source: https://stackoverflow.com/a/69915614/4687531
+printf '\33c\e[3J'
 
-# In zsh interactive mode, '#' is a regular character by default (unlike bash), so 'git something # git checkout main' gets passed as extra arguments
-setopt INTERACTIVE_COMMENTS
+# Based on the .zshrc1 config
+# source: https://github.com/mattmc3/zshrc1
 
-# --- zinit bootstrap ---
-ZINIT_HOME="${HOME}/.local/share/zinit/zinit.git"
-[ ! -d "$ZINIT_HOME" ] && mkdir -p "$(dirname $ZINIT_HOME)" && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-source "${ZINIT_HOME}/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
+# ------------------------------------------------------------------------------
+# region: Init z1
+# ------------------------------------------------------------------------------
 
-# --- OMZ plugins via zinit ---
-zinit snippet OMZP::aws
-zinit snippet OMZP::common-aliases
-zinit snippet OMZP::dotenv
-zinit snippet OMZP::git
-# zinit snippet OMZP::macos
-zinit snippet OMZP::npm
-zinit snippet OMZP::direnv
-zinit snippet OMZP::uv
-zinit snippet OMZP::pip
-zinit snippet OMZP::python
-zinit snippet OMZP::brew
+() {
+  typeset -g Z1_VERSION="0.0.1"
+  # typeset -gaH __z1_opts=(extended_glob NO_monitor NO_xtrace NO_ksh_arrays)
+  typeset -gaH __z1_opts=(extended_glob NO_ksh_arrays)
 
-# --- Standalone plugins ---
-zinit light zsh-users/zsh-autosuggestions
-zinit light zsh-users/zsh-syntax-highlighting
-zinit light zsh-users/zsh-completions
+  # Add variables for key Zsh directories.
+  export __zsh_config_dir=${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh}
+  export __zsh_user_data_dir=${XDG_DATA_HOME:-$HOME/.local/share}/zsh
+  export __zsh_cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/zsh
 
-# --- Keybindings (oh-my-zsh defaults + macOS Alt+arrows) ---
-zinit snippet OMZL::key-bindings.zsh
-bindkey '^[[1;3D' backward-word     # Alt+Left
-bindkey '^[[1;3C' forward-word      # Alt+Right
+  # Ensure Zsh directories exist.
+  local zdir
+  for zdir in __zsh_{config,user_data,cache}_dir; do
+    [[ -d "${(P)zdir}" ]] || mkdir -p ${(P)zdir}
+  done
 
-# Stop at /, -, . so Alt+arrows navigate path segments, not whole strings
-WORDCHARS='*?_[]~=&;!#$%^(){}'
+  # Define Z1 paths
+  typeset -g Z1_{COMPLETIONS,CONFIGS,FUNCTION}_DIR
+  typeset -g Z1_{COMPSTYLE,THEME}
 
-# --- Editor ---
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='nvim'
-fi
+  # Directory for Zsh autoload functions.
+  zstyle -s ':z1:functions' dir 'Z1_FUNCTION_DIR' \
+    || Z1_FUNCTION_DIR=${Z1_FUNCTION_DIR:-$__zsh_config_dir/functions}
 
-export MANPAGER='nvim +Man!'
-
-# --- Aliases ---
-alias grep='grep -i --color'
-alias ls=lsd
-
-alias pull="git pull -v"
-alias stash="git stash push"
-alias pop="git stash pop"
-# alias ga='git add'
-# alias gap='ga --patch'
-# alias gb='git branch'
-# alias gba='gb --all'
-# alias gc='git commit'
-# alias gca='gc --amend --no-edit'
-# alias gce='gc --amend'
-# alias gco='git checkout'
-# alias gcl='git clone --recursive'
-# alias gd='git diff --output-indicator-new=" " --output-indicator-old=" "'
-# alias gds='gd --staged'
-# alias gi='git init'
-# alias gl='git log --graph --all --pretty=format:"%C(magenta)%h %C(white) %an  %ar%C(blue)  %D%n%s%n"'
-# alias gm='git merge'
-# alias gn='git checkout -b'
-# alias gp='git push'
-# alias gr='git reset'
-# alias gs='git status --short'
-# alias gu='git pull'
-
-alias lg='lazygit --use-config-dir ~/.config/lazygit'
-alias ldk=lazydocker
-
-alias vim=nvim
-
-export git_main_branch=main
-
-# --- fzf ---
-source <(fzf --zsh)
-export FZF_CTRL_T_OPTS="
-  --walker-skip .git,node_modules,target,.venv,.ruff_cache,.pytest_cache,__pycache__
-  --preview 'bat -n --color=always {}'
-  --bind 'ctrl-/:change-preview-window(down|hidden|)'"
-
-# --- Cargo ---
-. "$HOME/.cargo/env"
-
-# --- yazi ---
-function yy() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
+  # Customize with zstyles.
+  [[ ! -r $__zsh_config_dir/.zstyles ]] || source $__zsh_config_dir/.zstyles
 }
 
-. "$HOME/.local/bin/env"
-export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+# endregion --------------------------------------------------------------------
 
-# --- nvm (lazy) ---
-# Node
-# source: https://blog.mitsunee.com/post/n-xdg-setup
-export NVM_DIR="$XDG_DATA_HOME/nvm"
-export N_PREFIX="$XDG_DATA_HOME/node"
-export N_CACHE_PREFIX="$XDG_CACHE_HOME"
-export N_PRESERVE_NPM=1
-export N_PRESERVE_COREPACK=1
-export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
-export COREPACK_HOME="$XDG_CACHE_HOME/node/corepack"
-export NODE_REPL_HISTORY="$XDG_STATE_HOME/node_repl/history"
-lazy_load_nvm() {
-  unset -f nvm node npm npx
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+# ------------------------------------------------------------------------------
+# region: z1_confd: Source Zsh config files in a conf.d directory
+# ------------------------------------------------------------------------------
+function z1_confd {
+  local confd zfile
+  zstyle -s ':z1:configs' dir 'confd' || confd=$__zsh_config_dir/conf.d
+  for zfile in $confd/*.zsh(N); do
+    [[ ${zfile:t} != '~'* ]] || continue
+    source $zfile
+  done
 }
-nvm() { lazy_load_nvm; nvm "$@"; }
-node() { lazy_load_nvm; node "$@"; }
-npm() { lazy_load_nvm; npm "$@"; }
-npx() { lazy_load_nvm; npx "$@"; }
+# endregion --------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
+# region: Run z1
+# ------------------------------------------------------------------------------
+
+# source all conf.d files first, so that the `z1_` funcs below are loaded
+z1_confd
+
+# load all the conf.d functions ----
+# conf.d functions
+z1_funcdir
+z1_directory
+z1_vi_style_keybindings
+z1_history
+z1_utility
+z1_completions
+z1_plugins
+
+# Homebrew apps ----
+z1_brew_app_starship
+z1_brew_app_zoxide
+z1_brew_app_fzf
+z1_brew_app_atuin
+
+# Aliases ----
+z1_aliases
+z1_suffix_aliases
+z1_global_aliases
+
+# Command Prompt ----
+# z1_simple_prompt
 
 
-path=(
-  # Rust CLI Utils
-  $CARGO_HOME/bin(N)
-
-  # core
-  $HOME/{,s}bin(N)
-  $HOME/.local/{,s}bin(N)
-  /opt/{homebrew,local}/{,s}bin(N)
-  $HOMEBREW_PREFIX/{,s}bin(N)
-
-  # apps
-  $HOMEBREW_PREFIX/opt/curl/bin(N)
-  $HOMEBREW_PREFIX/opt/go/libexec/bin(N)
-  $HOMEBREW_PREFIX/opt/ruby/bin(N)
-  $HOMEBREW_PREFIX/share/npm/bin(N)
-
-  $path
-)
-# --- Functions ---
-# source ~/.zsh_functions
-
-# --- Completions ---
-fpath+=~/.zfunc; autoload -Uz compinit; compinit
-
-zstyle ':completion:*' menu select
-
-# --- Starship ---
-eval "$(starship init zsh)"
+[[ -n "$ZSH_PROFILE" ]] && zprof
