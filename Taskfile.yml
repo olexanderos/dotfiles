@@ -3,18 +3,24 @@ version: "3"
 vars:
   DOTFILES_DIR: "{{.ROOT_DIR}}"
   XDG_CONFIG_HOME: '{{.XDG_CONFIG_HOME | default (printf "%s/.config" .HOME)}}'
+  XDG_DATA_HOME: '{{.XDG_DATA_HOME | default (printf "%s/.local/share" .HOME)}}'
+  XDG_CACHE_HOME: '{{.XDG_CACHE_HOME | default (printf "%s/.cache" .HOME)}}'
+  XDG_STATE_HOME: '{{.XDG_STATE_HOME | default (printf "%s/.local/state" .HOME)}}'
+  XDG_BIN_HOME: '{{.XDG_BIN_HOME | default (printf "%s/.local/bin" .HOME)}}'
+  XDG_RUNTIME_DIR: '{{.XDG_RUNTIME_DIR | default (printf "%s/.xdg" .HOME)}}'
+  XDG_PROJECTS_DIR: '{{.XDG_PROJECTS_DIR | default (printf "%s/projects" .HOME)}}'
 
   dirs:
-    - "{{XDG_BIN_HOME}}"
-    - "{{XDG_CONFIG_HOME}}"
-    - "{{XDG_CACHE_HOME}}"
-    - "{{XDG_DATA_HOME}}"
-    - "{{XDG_STATE_HOME}}"
-    - "{{XDG_RUNTIME_DIR}}"
-    - "{{XDG_PROJECTS_DIR}}"
-    # - "{{XDG_DATA_HOME}}/r"
-    - "{{XDG_DATA_HOME}}/tmux/plugins"
-    - "{{XDG_DATA_HOME}}/tmux/resurrect"
+    - "{{.XDG_BIN_HOME}}"
+    - "{{.XDG_CONFIG_HOME}}"
+    - "{{.XDG_CACHE_HOME}}"
+    - "{{.XDG_DATA_HOME}}"
+    - "{{.XDG_STATE_HOME}}"
+    - "{{.XDG_RUNTIME_DIR}}"
+    - "{{.XDG_PROJECTS_DIR}}"
+    # - "{{.XDG_DATA_HOME}}/r"
+    - "{{.XDG_DATA_HOME}}/tmux/plugins"
+    - "{{.XDG_DATA_HOME}}/tmux/resurrect"
 
 tasks:
   create:
