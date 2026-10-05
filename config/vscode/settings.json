@@ -1,6 +1,7 @@
 {
     "files.autoSave": "onFocusChange",
     "terminal.integrated.fontFamily": "Hack Nerd Font Mono",
+    "terminal.integrated.macOptionIsMeta": true,
     "githubLocalActions.dockerDesktopPath": "/Applications/Docker.app",
     "workbench.colorTheme": "Sublime Text 4 Theme",
     "yaml.disableSchemaDetection": [
