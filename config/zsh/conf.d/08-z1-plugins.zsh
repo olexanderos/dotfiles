@@ -126,6 +126,7 @@ function z1_plugins {
   local -a plugins=(
     zsh-users/zsh-autosuggestions
     zsh-users/zsh-syntax-highlighting
+    zsh-users/zsh-completions
   )
 
   plugin-load $plugins
