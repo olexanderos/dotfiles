@@ -6,7 +6,7 @@
 export EDITOR=${EDITOR:-nvim}
 export VISUAL=${VISUAL:-nvim}
 export PAGER=${PAGER:-less}
-# export BROWSER=${BROWSER:-firefox}
+export BROWSER=${BROWSER:-brave}
 
 # Encodings, languges and misc settings
 export LANG=en_US.UTF-8
